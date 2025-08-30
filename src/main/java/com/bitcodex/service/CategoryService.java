@@ -2,11 +2,14 @@ package com.bitcodex.service;
 
 import java.util.List;
 
-import com.bitcodex.entity.Category;
+import com.bitcodex.dto.CategoryDto;
+import com.bitcodex.dto.CategoryResponse;
 
 public interface CategoryService {
 
-	public Boolean saveCategory(Category category);
+	public Boolean saveCategory(CategoryDto category);
 	
-	public List<Category> getAllCategory();
+	public List<CategoryDto> getAllCategory();
+
+	public List<CategoryResponse> getActiveCategory();
 }
