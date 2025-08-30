@@ -26,7 +26,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
-	@PostMapping("/save-category")
+	@PostMapping("/save")
 	public ResponseEntity<?> saveCategory(@RequestBody CategoryDto category){
 		Boolean saveCategory = categoryService.saveCategory(category);
 		
@@ -38,7 +38,7 @@ public class CategoryController {
 		}
 	}
 	
-	@GetMapping("/category")
+	@GetMapping("/")
 	public ResponseEntity<?> getAllCategory(){
 		List<CategoryDto> allCategory = categoryService.getAllCategory();
 		
@@ -50,7 +50,7 @@ public class CategoryController {
 		}
 	}
 	
-	@GetMapping("/active-category")
+	@GetMapping("/active")
 	public ResponseEntity<?> getACtiveCategory(){
 		List<CategoryResponse> allCategory = categoryService.getActiveCategory();
 		
