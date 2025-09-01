@@ -19,6 +19,9 @@ import com.bitcodex.dto.CategoryDto;
 import com.bitcodex.dto.CategoryResponse;
 import com.bitcodex.service.CategoryService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -40,6 +43,8 @@ public class CategoryController {
 	
 	@GetMapping("/")
 	public ResponseEntity<?> getAllCategory(){
+//		String m = null;
+//		m.toUpperCase();
 		List<CategoryDto> allCategory = categoryService.getAllCategory();
 		
 		if(CollectionUtils.isEmpty(allCategory)) {
@@ -64,13 +69,15 @@ public class CategoryController {
 	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id){
-		
+	public ResponseEntity<?> getCategoryDetailsById(@PathVariable Integer id) throws Exception{
+
 		CategoryDto categoryDto = categoryService.getCategoryById(id);
 		if(ObjectUtils.isEmpty(categoryDto)) {
-			return new ResponseEntity<>("Category not found with id="+id,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Internal Server Error",HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(categoryDto,HttpStatus.OK);
+	
+		
 	}
 	
 	@DeleteMapping("/{id}")
