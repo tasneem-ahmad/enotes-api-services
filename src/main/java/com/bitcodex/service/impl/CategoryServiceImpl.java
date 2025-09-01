@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 import com.bitcodex.dto.CategoryDto;
 import com.bitcodex.dto.CategoryResponse;
 import com.bitcodex.entity.Category;
+import com.bitcodex.exception.ResourceNotFoundException;
 import com.bitcodex.repository.CategoryRepository;
 import com.bitcodex.service.CategoryService;
 
@@ -87,12 +88,13 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
 	@Override
-	public CategoryDto getCategoryById(Integer id) {
+	public CategoryDto getCategoryById(Integer id) throws Exception {
 
-		Optional<Category> findByCategory = categoryRepo.findByIdAndIsDeletedFalse(id);
+		Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
+				.orElseThrow(()->new ResourceNotFoundException("Category not found with id="+id));
 		
-		if(findByCategory.isPresent()) {
-			Category category = findByCategory.get();
+		if(!ObjectUtils.isEmpty(category)) {
+			category.getName().toUpperCase();
 			return mapper.map(category, CategoryDto.class);
 		}
 		return null;
