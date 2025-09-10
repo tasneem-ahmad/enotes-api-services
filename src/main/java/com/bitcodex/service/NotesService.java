@@ -2,11 +2,13 @@ package com.bitcodex.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.bitcodex.dto.NotesDto;
 
 public interface NotesService {
 
-	public Boolean saveNotes(NotesDto notesDto) throws Exception;
+	public Boolean saveNotes(String notes, MultipartFile file) throws Exception;
 	
 	public List<NotesDto> getAllNotes();
 }
