@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bitcodex.dto.NotesDto;
+import com.bitcodex.dto.NotesResponse;
 import com.bitcodex.entity.FileDetails;
 import com.bitcodex.service.NotesService;
 import com.bitcodex.util.CommonUtil;
@@ -57,6 +58,21 @@ public class NotesController {
 		if(CollectionUtils.isEmpty(notes)) {
 			return ResponseEntity.noContent().build();
 		}
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
+	
+	@GetMapping("/user-notes")
+	public ResponseEntity<?> getAllNotesByUser(
+			@RequestParam(name = "pageNo",defaultValue = "0") Integer pageNo,
+			@RequestParam(name = "pageSize",defaultValue = "10") Integer pageSize){
+		
+		Integer userId = 2;
+		
+		NotesResponse notes = notesService.getAllNotesByUser(userId,pageNo,pageSize);
+		
+//		if(CollectionUtils.isEmpty(notes)) {
+//			return ResponseEntity.noContent().build();
+//		}
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
 	}
 }
