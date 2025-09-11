@@ -1,5 +1,7 @@
 package com.bitcodex.exception;
 
+import java.io.FileNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -48,5 +50,10 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
 		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(FileNotFoundException.class)
+	public ResponseEntity<?> handleFileNotFoundException(FileNotFoundException e){
+		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 	}
 }
