@@ -1,7 +1,9 @@
 package com.bitcodex.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bitcodex.dto.NotesDto;
@@ -80,9 +83,9 @@ public class NotesServiceImpl implements NotesService{
 			String originaleFileName = file.getOriginalFilename();
 			String extension = FilenameUtils.getExtension(originaleFileName);
 			
-			List<String> extensionAllow =  Arrays.asList("pdf","xlsx","jpg", "png");
+			List<String> extensionAllow =  Arrays.asList("pdf","xlsx","jpg", "png", "docx");
 			if(!extensionAllow.contains(extension)) {
-				throw new IllegalArgumentException("invalid file format ! upload only .pdf, .xlsx, .jpg");
+				throw new IllegalArgumentException("invalid file format ! upload only .pdf, .xlsx, .jpg, .docx");
 			}
 			
 			
@@ -141,6 +144,22 @@ public class NotesServiceImpl implements NotesService{
 
 		return notesRepo.findAll().stream()
 				.map(note -> mapper.map(note, NotesDto.class)).toList();
+	}
+
+	@Override
+	public byte[] downloadFile(FileDetails fileDtls) throws Exception {
+		
+		InputStream io = new FileInputStream(fileDtls.getPath());
+		
+		byte[] byteData = StreamUtils.copyToByteArray(io);
+		return StreamUtils.copyToByteArray(io);
+	}
+
+	@Override
+	public FileDetails getFileDetails(Integer id) throws Exception {
+		
+		FileDetails fileDtls = fileRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("File is not available"));
+		return fileDtls;
 	}
 
 }
