@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bitcodex.dto.NotesDto;
 import com.bitcodex.dto.NotesResponse;
 import com.bitcodex.entity.FileDetails;
+import com.bitcodex.exception.ResourceNotFoundException;
 import com.bitcodex.service.NotesService;
 import com.bitcodex.util.CommonUtil;
 
@@ -74,5 +75,32 @@ public class NotesController {
 //			return ResponseEntity.noContent().build();
 //		}
 		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+	}
+	
+	@GetMapping("/delete/{id}")
+	public ResponseEntity<?> deleteNotes(@PathVariable Integer id) throws ResourceNotFoundException{
+		notesService.softDeleteNotes(id);
+		
+		return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/restore/{id}")
+	public ResponseEntity<?> restoreNotes(@PathVariable Integer id) throws ResourceNotFoundException{
+		notesService.restoreNotes(id);
+		
+		return CommonUtil.createBuildResponseMessage("Restore Success", HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/recycle-bin")
+	public ResponseEntity<?> getUserRecycleBinNotes() throws ResourceNotFoundException{
+		Integer userId =2;
+		List<NotesDto> notes = notesService.getUserRecycleBinNotes(userId);
+		if(CollectionUtils.isEmpty(notes)) {
+			return CommonUtil.createBuildResponseMessage("Notes not available in recycle bin", HttpStatus.OK);
+		}
+		return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+		
 	}
 }

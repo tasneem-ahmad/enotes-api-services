@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bitcodex.dto.NotesDto;
 import com.bitcodex.dto.NotesResponse;
 import com.bitcodex.entity.FileDetails;
+import com.bitcodex.exception.ResourceNotFoundException;
 
 public interface NotesService {
 
@@ -19,4 +20,10 @@ public interface NotesService {
 	public FileDetails getFileDetails(Integer id) throws Exception;
 
 	public NotesResponse getAllNotesByUser(Integer userId,Integer pageNo, Integer pageSize);
+
+	public void softDeleteNotes(Integer id) throws ResourceNotFoundException;
+
+	public void restoreNotes(Integer id) throws ResourceNotFoundException;
+
+	public List<NotesDto> getUserRecycleBinNotes(Integer userId);
 }
