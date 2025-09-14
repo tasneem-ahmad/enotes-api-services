@@ -37,4 +37,6 @@ public interface NotesService {
 	public void unFavouriteNotes(Integer noteId) throws ResourceNotFoundException;
 	
 	public List<FavouriteNoteDto> getUserFavouriteNotes() throws ResourceNotFoundException;
+
+	public Boolean copyNotes(Integer id) throws ResourceNotFoundException;
 }
