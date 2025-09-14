@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bitcodex.dto.FavouriteNoteDto;
 import com.bitcodex.dto.NotesDto;
 import com.bitcodex.dto.NotesResponse;
 import com.bitcodex.entity.FileDetails;
@@ -30,4 +31,10 @@ public interface NotesService {
 	public void hardDeleteNotes(Integer id) throws ResourceNotFoundException;
 
 	public void emptyRecycleBin(int userId);
+	
+	public void favouriteNotes(Integer noteId) throws ResourceNotFoundException;
+	
+	public void unFavouriteNotes(Integer noteId) throws ResourceNotFoundException;
+	
+	public List<FavouriteNoteDto> getUserFavouriteNotes() throws ResourceNotFoundException;
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bitcodex.dto.FavouriteNoteDto;
 import com.bitcodex.dto.NotesDto;
 import com.bitcodex.dto.NotesResponse;
 import com.bitcodex.entity.FileDetails;
@@ -119,6 +120,35 @@ public class NotesController {
 		notesService.emptyRecycleBin(userId);
 		
 		return CommonUtil.createBuildResponseMessage("Delete Success", HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/fav/{noteId}")
+	public ResponseEntity<?> favouriteNote(@PathVariable Integer noteId) throws ResourceNotFoundException{
+		
+		notesService.favouriteNotes(noteId);
+		
+		return CommonUtil.createBuildResponseMessage("Notes Added Favourite", HttpStatus.CREATED);
+		
+	}
+	
+	@GetMapping("/unfav/{favNoteId}")
+	public ResponseEntity<?> unFavouriteNote(@PathVariable Integer favNoteId) throws ResourceNotFoundException{
+		
+		notesService.unFavouriteNotes(favNoteId);
+		
+		return CommonUtil.createBuildResponseMessage("Remove Favourite", HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/fav-note")
+	public ResponseEntity<?> getUserFavourite() throws ResourceNotFoundException{
+		
+		List<FavouriteNoteDto> userFavouriteNotes = notesService.getUserFavouriteNotes();
+		if(CollectionUtils.isEmpty(userFavouriteNotes)) {
+			return ResponseEntity.noContent().build();
+		}
+		return CommonUtil.createBuildResponse(userFavouriteNotes, HttpStatus.OK);
 		
 	}
 }
