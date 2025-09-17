@@ -15,15 +15,20 @@ import com.bitcodex.dto.TodoDto;
 import com.bitcodex.dto.TodoDto.StatusDto;
 import com.bitcodex.dto.UserDto;
 import com.bitcodex.enums.TodoStatus;
+import com.bitcodex.exception.ExistDataException;
 import com.bitcodex.exception.ResourceNotFoundException;
 import com.bitcodex.exception.ValidationException;
 import com.bitcodex.repository.RoleRepository;
+import com.bitcodex.repository.UserRepository;
 
 @Component
 public class Validation {
 	
 	@Autowired
 	private RoleRepository roleRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	public void categoryValidation(CategoryDto categoryDto) {
 		
@@ -94,6 +99,11 @@ public class Validation {
 		
 		if(!StringUtils.hasText(userDto.getEmail()) || !userDto.getEmail().matches(Constants.EMAIL_REGEX)) {
 			throw new IllegalArgumentException("Email is invalid!");
+		}else {
+			Boolean existEmail = userRepo.existsByEmail(userDto.getEmail());
+			if(existEmail) {
+				throw new ExistDataException("Email id already exist!");
+			}
 		}
 		
 		if(!StringUtils.hasText(userDto.getMobNo()) || !userDto.getMobNo().matches(Constants.MOBILE_REGEX)) {
