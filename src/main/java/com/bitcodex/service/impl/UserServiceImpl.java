@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.bitcodex.dto.EmailRequest;
 import com.bitcodex.dto.UserDto;
 import com.bitcodex.entity.Role;
 import com.bitcodex.entity.User;
@@ -29,9 +30,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private EmailService emailService;
+
 
 	@Override
-	public Boolean register(UserDto userDto) {
+	public Boolean register(UserDto userDto) throws Exception {
 
 		validation.userValidation(userDto);
 		
@@ -39,10 +44,31 @@ public class UserServiceImpl implements UserService {
 		setRole(userDto,user);
 		User saveUser = UserRepo.save(user);
 		if(!ObjectUtils.isEmpty(saveUser)) {
+			emailSend(saveUser);
 			return true;
 		}
 		
 		return false;
+	}
+
+	private void emailSend(User saveUser) throws Exception {
+		
+		String message = "Hi,<b>"+saveUser.getFirstName()+"</b>"
+				+"<br> Your Account register successfully.<br>"
+				+"<br> Click the below link and verify your account <br>"
+				+"<a href='#'>Click Here</a> <br><br>"
+				+"Thanks,<br>"
+				+"Enotes.com";
+		
+		EmailRequest emailRequest = EmailRequest.builder()
+									.to(saveUser.getEmail())
+									.title("Account Creating Confirmation")
+									.subject("Account Created Success")
+									.message(message)
+									.build();
+		
+		emailService.sendEmail(emailRequest);
+		
 	}
 
 	private void setRole(UserDto userDto, User user) {
