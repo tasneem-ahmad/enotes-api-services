@@ -12,17 +12,20 @@ import com.bitcodex.dto.UserDto;
 import com.bitcodex.service.UserService;
 import com.bitcodex.util.CommonUtil;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 	
 	@Autowired
 	private UserService userService;
 	
 	@PostMapping("/")
-	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) throws Exception{
+	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto,HttpServletRequest request) throws Exception{
 		
-		Boolean register = userService.register(userDto);
+		String url = CommonUtil.getUrl(request);
+		Boolean register = userService.register(userDto,url);
 		if(register) {
 			return CommonUtil.createBuildResponseMessage("Register success", HttpStatus.CREATED);
 		}
