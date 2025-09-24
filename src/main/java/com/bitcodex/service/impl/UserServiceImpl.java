@@ -22,6 +22,7 @@ import com.bitcodex.entity.Role;
 import com.bitcodex.entity.User;
 import com.bitcodex.repository.RoleRepository;
 import com.bitcodex.repository.UserRepository;
+import com.bitcodex.service.JwtService;
 import com.bitcodex.service.UserService;
 import com.bitcodex.util.Validation;
 
@@ -49,6 +50,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	@Autowired
+	private JwtService jwtService;
+	
 	@Override
 	public Boolean register(UserDto userDto,String url) throws Exception {
 
@@ -112,7 +116,7 @@ public class UserServiceImpl implements UserService {
 		if(authenticate.isAuthenticated()) {
 			CustomUserDetails customUserDetails = (CustomUserDetails)authenticate.getPrincipal();
 			
-			String token = "jhsdufhSDfhsdaofhsadhfosdhv";
+			String token = jwtService.generateToken(customUserDetails.getUser());
 			
 			LoginResponse loginResponse = LoginResponse.builder()
 										  .user(mapper.map(customUserDetails.getUser(), UserDto.class))
