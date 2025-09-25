@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class TodoController {
 	private TodoService todoService;
 	
 	@PostMapping("/")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> saveTodo(@RequestBody TodoDto todo) throws ResourceNotFoundException{
 		
 		Boolean saveTodo = todoService.saveTodo(todo);
@@ -38,13 +40,15 @@ public class TodoController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> saveTodo(@PathVariable Integer id) throws ResourceNotFoundException{
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<?> getTodoById(@PathVariable Integer id) throws ResourceNotFoundException{
 		
 		TodoDto todo = todoService.getTodoById(id);
 		return CommonUtil.createBuildResponse(todo, HttpStatus.OK);
 	}
 	
 	@GetMapping("/list")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> getAllTodoByUser() throws ResourceNotFoundException{
 		
 		List<TodoDto> todoList = todoService.geTodoByUser();
