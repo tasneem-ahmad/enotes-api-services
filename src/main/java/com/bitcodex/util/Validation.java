@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import com.bitcodex.dto.CategoryDto;
 import com.bitcodex.dto.TodoDto;
 import com.bitcodex.dto.TodoDto.StatusDto;
-import com.bitcodex.dto.UserDto;
+import com.bitcodex.dto.UserRequest;
 import com.bitcodex.enums.TodoStatus;
 import com.bitcodex.exception.ExistDataException;
 import com.bitcodex.exception.ResourceNotFoundException;
@@ -87,7 +87,7 @@ public class Validation {
 		}
 	}
 	
-	public void userValidation(UserDto userDto) {
+	public void userValidation(UserRequest userDto) {
 		
 		if(!StringUtils.hasText(userDto.getFirstName())) {
 			throw new IllegalArgumentException("First Name is invalid!");
