@@ -16,7 +16,7 @@ import com.bitcodex.config.security.CustomUserDetails;
 import com.bitcodex.controller.LoginRequest;
 import com.bitcodex.dto.EmailRequest;
 import com.bitcodex.dto.LoginResponse;
-import com.bitcodex.dto.UserDto;
+import com.bitcodex.dto.UserRequest;
 import com.bitcodex.entity.AccountStatus;
 import com.bitcodex.entity.Role;
 import com.bitcodex.entity.User;
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	private JwtService jwtService;
 	
 	@Override
-	public Boolean register(UserDto userDto,String url) throws Exception {
+	public Boolean register(UserRequest userDto,String url) throws Exception {
 
 		validation.userValidation(userDto);
 		
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
-	private void setRole(UserDto userDto, User user) {
+	private void setRole(UserRequest userDto, User user) {
 		List<Integer> reqRoleId = userDto.getRoles().stream().map(r -> r.getId()).toList();
 		List<Role> roles = roleRepo.findAllById(reqRoleId);
 		user.setRoles(roles);
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
 			String token = jwtService.generateToken(customUserDetails.getUser());
 			
 			LoginResponse loginResponse = LoginResponse.builder()
-										  .user(mapper.map(customUserDetails.getUser(), UserDto.class))
+										  .user(mapper.map(customUserDetails.getUser(), UserRequest.class))
 										  .token(token)
 										  .build();
 			

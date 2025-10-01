@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitcodex.dto.LoginResponse;
-import com.bitcodex.dto.UserDto;
+import com.bitcodex.dto.UserRequest;
 import com.bitcodex.service.UserService;
 import com.bitcodex.util.CommonUtil;
 
@@ -24,7 +24,7 @@ public class AuthController {
 	private UserService userService;
 	
 	@PostMapping("/")
-	public ResponseEntity<?> registerUser(@RequestBody UserDto userDto,HttpServletRequest request) throws Exception{
+	public ResponseEntity<?> registerUser(@RequestBody UserRequest userDto,HttpServletRequest request) throws Exception{
 		
 		String url = CommonUtil.getUrl(request);
 		Boolean register = userService.register(userDto,url);
