@@ -14,6 +14,7 @@ import com.bitcodex.enums.TodoStatus;
 import com.bitcodex.exception.ResourceNotFoundException;
 import com.bitcodex.repository.TodoRepository;
 import com.bitcodex.service.TodoService;
+import com.bitcodex.util.CommonUtil;
 import com.bitcodex.util.Validation;
 
 @Service
@@ -71,7 +72,7 @@ public class TodoServiceImpl implements TodoService{
 	@Override
 	public List<TodoDto> geTodoByUser() {
 
-		Integer userId = 2;
+		Integer userId = CommonUtil.getLoggedInUser().getId();
 		List<Todo> todos = todoRepo.findByCreatedBy(userId);
 		
 		return todos.stream().map(td -> mapper.map(td, TodoDto.class)).toList();
